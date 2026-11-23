@@ -7,7 +7,8 @@
 An original open-world crime game for [make.fun's **gta6-01** bounty](https://make.fun/bounty/gta6-01), built as
 plain static files that play offline in a desktop browser. No network, no
 build step: open `game/index.html` (or `node serve.ts` and visit
-http://localhost:8080).
+http://localhost:8080). Works in any modern desktop browser with WebGL —
+no install, no account, no network required.
 
 ## The game
 

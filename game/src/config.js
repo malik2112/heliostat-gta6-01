@@ -112,7 +112,7 @@ export const PALETTE = {
   minimapSand: "#e0b878",
 };
 
-// Story: Sol Reyes, a driver new to town, owes fixer Dr. Ilya Voss.
+// Story: Sol Reyes, a driver new to Sunforge, owes fixer Dr. Ilya Voss.
 export const STORY = {
   hero: "Sol Reyes",
   fixer: "Dr. Ilya Voss",
