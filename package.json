@@ -1,0 +1,1 @@
+{"description":"HELIOSTAT — open-world crime in Sun City (make.fun gta6-01)","license":"MIT","name":"heliostat-gta6-01","private":true,"scripts":{"build":"node main.ts","start":"node serve.ts"},"type":"module","version":"1.0.0"}

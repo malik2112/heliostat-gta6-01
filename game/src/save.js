@@ -1,57 +1,44 @@
-// SOLMAR BAY — save.js
-// One job: persist Sol Reyes's progress in localStorage — cash, story progress,
-// stats — and load it back. The game never needs a server to remember.
-import { SAVE_KEY, HUB } from './config.js';
+// HELIOSTAT — save / load. One small JSON blob in localStorage: cash,
+// mission progress, best wanted level, kills, and play time. Nothing
+// sensitive, nothing that needs a server.
 
-export function saveGame(G) {
+import { CFG } from './config.js';
+
+export function saveGame(game) {
   try {
     const data = {
-      version: 1,
-      cash: G.player.cash,
-      missionIndex: G.missions.index,
-      missionsDone: G.stats.missionsDone,
-      carsStolen: G.stats.carsStolen,
-      shotsFired: G.stats.shotsFired,
-      playSeconds: Math.floor(G.time),
-      savedAt: new Date().toISOString(),
+      v: 1,
+      money: Math.round(game.player.money),
+      missionIndex: game.missions.nextIndex,
+      completed: game.missions.state.completed,
+      bestStars: game.stats.bestStars,
+      kills: game.stats.kills,
+      playSeconds: Math.round(game.stats.playSeconds),
+      savedAt: Date.now(),
     };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    localStorage.setItem(CFG.saveKey, JSON.stringify(data));
     return true;
-  } catch (e) {
+  } catch (_e) {
     return false;
   }
 }
 
-export function loadSave() {
+export function loadGame() {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = localStorage.getItem(CFG.saveKey);
     if (!raw) return null;
     const data = JSON.parse(raw);
-    if (!data || data.version !== 1) return null;
+    if (!data || data.v !== 1) return null;
     return data;
-  } catch (e) {
+  } catch (_e) {
     return null;
   }
 }
 
-export function applySave(G, data) {
-  if (!data) return false;
-  G.player.cash = data.cash ?? 50;
-  G.stats.missionsDone = data.missionsDone ?? 0;
-  G.stats.carsStolen = data.carsStolen ?? 0;
-  G.stats.shotsFired = data.shotsFired ?? 0;
-  // resume at the next uncompleted mission, back at Sunforge Plant
-  G.missions.index = Math.min(data.missionIndex ?? 0, 4);
-  G.missions.state = 'waiting-hub';
-  G.player.pos.set(HUB.x + 6, 0, HUB.z - 18);
-  G.player.mesh.position.copy(G.player.pos);
-  return true;
-}
-
-export function hasSave() {
+export function clearSave() {
   try {
-    return !!localStorage.getItem(SAVE_KEY);
-  } catch (e) {
-    return false;
+    localStorage.removeItem(CFG.saveKey);
+  } catch (_e) {
+    // Storage unavailable — the game simply starts fresh.
   }
 }
